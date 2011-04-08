@@ -1,4 +1,5 @@
 import math
+import cmath
 
 class DbRefError(Exception):
     pass
@@ -41,6 +42,12 @@ def cweighting(freq):
     a3 = 10 ** (0.06 / 20)
     x = freq ** 2
     return a1 * x * a3 / ((x + a2) * (x + a1))
+
+def rotate(v, a):
+    return v * cmath.rect(1, math.radians(a)) 
+
+def rotate2(x, xa, y, ya):
+    return rotate(x, xa) + rotate(y, ya)
 
 class DCOffset:
     def __init__(self):

@@ -36,6 +36,14 @@ class TestMathFunctions(unittest.TestCase):
         self.assertAlmostEqual(gmath.cweighting(5000), 0.862109780311584)
         self.assertAlmostEqual(gmath.cweighting(19000), 0.293957978487015)
         
+    def test_rotate(self):
+        self.assertAlmostEqual(gmath.rotate(3, 0), 3)
+        self.assertAlmostEqual(gmath.rotate(5, 90), 5j)
+        self.assertAlmostEqual(gmath.rotate(-3, -155), 2.718923361109949889727657970263+1.2678547852220983085609354689432j)
+        
+    def test_rotate2(self):
+        self.assertAlmostEqual(gmath.rotate2(3, 0, 5, 90), 3+5j)
+        
     def test_dcoffset(self):
         values = range(1, 11)
         dc = gmath.DCOffset()
