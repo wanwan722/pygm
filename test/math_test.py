@@ -44,6 +44,18 @@ class TestMathFunctions(unittest.TestCase):
     def test_rotate2(self):
         self.assertAlmostEqual(gmath.rotate2(3, 0, 5, 90), 3+5j)
         
+    def test_oct1_gain(self):
+        #self.assertEqual(gmath.oct1_gain(125, 125), (0.3, -0.3))
+        self.assertEqual(gmath.oct1_gain(200, 1000), (-49.6, -gmath.inf))
+        self.assertEqual(gmath.oct1_gain(10, 1000), (-70, -gmath.inf))
+        self.assertEqual(gmath.oct1_gain(100000, 1000), (-70, -gmath.inf))
+        
+    def test_oct3_gain(self):
+        self.assertEqual(gmath.oct3_gain(125, 125), (0.3, -0.3))
+        self.assertEqual(gmath.oct3_gain(200, 1000), (-68.984341938214129, -gmath.inf))
+        self.assertEqual(gmath.oct3_gain(10, 1000), (-70, -gmath.inf))
+        self.assertEqual(gmath.oct3_gain(100000, 1000), (-70, -gmath.inf))
+        
     def test_dcoffset(self):
         values = range(1, 11)
         dc = gmath.DCOffset()

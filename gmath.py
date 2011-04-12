@@ -1,5 +1,9 @@
 import math
 import cmath
+import numpy
+import scipy.interpolate
+
+inf = float('inf')
 
 class DbRefError(Exception):
     pass
@@ -48,6 +52,36 @@ def rotate(v, a):
 
 def rotate2(x, xa, y, ya):
     return rotate(x, xa) + rotate(y, ya)
+
+def _get_0darray(arr):
+    return arr.flat.next()
+
+def _oct_gain(f, b, x):
+    y1 = numpy.array([-70, -61, -42, -17.5, -2, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3,
+                      0.3, 0.3, 0.3, -2.0, -17.5, -42, -61, -70])
+    y2 = numpy.array([-inf, -inf, -inf, -inf, -5, -5, -1.3, -0.6, -0.4, -0.3,
+                      -0.4, -0.6, -1.3, -5, -5, -inf, -inf, -inf, -inf])
+    
+    c1 = scipy.interpolate.interpolate.interp1d(x, y1, bounds_error=False, fill_value=-70)
+    c2 = scipy.interpolate.interpolate.interp1d(x, y2, bounds_error=False, fill_value=-inf)
+    r1 = _get_0darray(c1(f))
+    r2 = _get_0darray(c2(f))
+    if numpy.isnan(r2):
+        r2 = -numpy.inf
+    return (r1, r2)
+
+def oct1_gain(f, b):
+    x = numpy.array([2**-4, 2**-3, 2**-2, 2**-1, 2**-(1.0/2), 2**-(1.0/2),
+                     2**-(3.0/8), 2**-(1.0/4), 2**-(1.0/8), 1, 2**(1.0/8),
+                     2**(1.0/4), 2**(3.0/8), 2**(1.0/2), 2**(1.0/2), 2**1,
+                     2**2, 2**3, 2**4])
+    return _oct_gain(f, b, b * x)
+    
+def oct3_gain(f, b):
+    x = numpy.array([0.184, 0.32578, 0.52996, 0.77181, 0.8909, 0.8909, 0.91932,
+                     0.94702, 0.97394, 1, 1.02676, 1.05594, 1.08776, 1.12246,
+                     1.12246, 1.29565, 1.88695, 3.06955, 5.43474])
+    return _oct_gain(f, b, b * x)
 
 class DCOffset:
     def __init__(self):
